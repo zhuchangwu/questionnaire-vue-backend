@@ -13,7 +13,9 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8081")
+                .allowedOrigins("http://localhost:8080")
+                // x-token 是通过观察浏览器上的报错添加上来的请求头
+                .allowedHeaders("Content-Type, Access-Token, Authrication, x-token")
                 .allowedMethods("GET", "HEAD", "POST","PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true);
     }

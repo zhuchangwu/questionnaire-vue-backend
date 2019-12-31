@@ -41,17 +41,13 @@ public class UserService {
         // AuthenticationManager 会将这个事件委托给 AuthenticationProvider列表  分别经过 AnonymousAuthenticationProvider -> DaoAuthenticationProvider
         // 换句话说, 如果前端传递进来的用户名和密码不正确的的, 在这里会被检查出来, 然后报异常, 由SpringSecurity的ExceptionHandler具体处理
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        List<Role> roles = userRepository.findUserByUsername(username).getRoles();
-        String sufix = null;
-        if (roles.contains(Role.ROLE_ADMIN)){
-            sufix = ".admin";
-        }else if(roles.contains(Role.ROLE_CLIENT)){
-            sufix = ".editor";
-        }
-         // todo 此时不能从上下文中获取用户的信息, 获取出来的结果是  匿名用户   ?????
+
+        User user = userRepository.findUserByUsername(username);
+
+        // todo 此时不能从上下文中获取用户的信息, 获取出来的结果是  匿名用户   ?????
         // 如果是管理员, 返回    token.admin
         // 如果是普通用户, 返回  token.editor
-        return jwtTokenProvider.createToken(username,roles)+sufix;
+        return jwtTokenProvider.createToken(username,user.getRoles(),user.getId());
     }
 
     public User findUserByUsername(String username) {

@@ -1,11 +1,13 @@
 package com.changwu.questionnaire.controller;
 
-import com.changwu.questionnaire.bean.Role;
 import com.changwu.questionnaire.security.JwtTokenProvider;
 import com.changwu.questionnaire.service.UserService;
 import com.changwu.questionnaire.vo.JSONResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -30,19 +32,20 @@ public class UserController {
      */
     @PostMapping("/login")
     public JSONResult login(@RequestParam("username") String username, @RequestParam("password") String password) {
-      String token = userService.login(username,password);
+        String token = userService.login(username,password);
         return  JSONResult.responseToken(200,token);
     }
 
     /**
      * 获取用户的信息
      *
-     * @param token
      * @return
      */
+  /*  @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")*/
     @RequestMapping(path = "/info",method = RequestMethod.GET)
-    public JSONResult info(@RequestParam("token") String token) {
-        System.out.println("token = "+ token);
-        return  JSONResult.build(200,"ok",userService.findUserByUsername("admin"));
+    public JSONResult info(HttpServletRequest httpServletRequest) {
+        String token =  jwtTokenProvider.resolve(httpServletRequest);
+        String username = jwtTokenProvider.getUsername(token);
+        return  JSONResult.build(200,"ok",userService.findUserByUsername(username));
     }
 }
