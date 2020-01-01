@@ -1,16 +1,16 @@
 package com.changwu.questionnaire.vo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.springframework.data.domain.Page;
+
+import java.io.Serializable;
+
 /**
  * @Description:
  * 自定义响应数据结构
  * 200：表示成功
- *
- * 500：表示错误，错误信息在msg字段中
- * 501：bean验证错误，不管多少个错误都以map形式返回
- * 502：拦截器拦截到用户token出错
- * 555：异常抛出信息
  */
-public class JSONResult {
+public class JSONResult implements Serializable {
 
     // 响应业务状态
     private Integer code;
@@ -24,40 +24,37 @@ public class JSONResult {
     // 响应中的数据
     private Object data;
 
+    public JSONResult(Integer code, Object page) {
+        this.code=code;
+        this.data=page;
+    }
+
 
     // 返回给前端token
     public static JSONResult responseToken(Integer code, String token) {
         return new JSONResult(code, token);
     }
 
+
     // 返回给前端正常的响应信息
     public static JSONResult build(Integer code, String msg, Object data) {
         return new JSONResult(code, msg, data);
     }
 
-    public static JSONResult ok(Object data) {
-        return new JSONResult(data);
+    public static JSONResult responsePage(Integer code, Object page) {
+        return new JSONResult(code, page);
     }
 
-    public static JSONResult ok() {
-        return new JSONResult(null);
+
+
+    public static JSONResult ok(String msg) {
+        return new JSONResult(msg);
     }
 
-    public static JSONResult errorMsg(String msg) {
-        return new JSONResult(500, msg, null);
+    public static JSONResult errorMsg(Integer code , String msg) {
+        return new JSONResult(code, msg, null);
     }
 
-    public static JSONResult errorMap(Object data) {
-        return new JSONResult(501, "error", data);
-    }
-
-    public static JSONResult errorTokenMsg(String msg) {
-        return new JSONResult(502, msg, null);
-    }
-
-    public static JSONResult errorException(String msg) {
-        return new JSONResult(555, msg, null);
-    }
 
     public JSONResult() {
 
@@ -68,16 +65,16 @@ public class JSONResult {
         this.token = token;
     }
 
+
     public JSONResult(Integer code, String msg, Object data) {
         this.code = code;
-        this.msg = msg;
+        this.token = msg;
         this.data = data;
     }
 
-    public JSONResult(Object data) {
+    public JSONResult(String msg) {
         this.code = 200;
-        this.msg = "OK";
-        this.data = data;
+        this.msg = msg;
     }
 
     public Integer getCode() {

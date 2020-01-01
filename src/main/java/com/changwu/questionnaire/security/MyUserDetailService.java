@@ -1,17 +1,12 @@
 package com.changwu.questionnaire.security;
 
-import com.changwu.questionnaire.bean.Role;
 import com.changwu.questionnaire.bean.User;
 import com.changwu.questionnaire.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Author: Changwu

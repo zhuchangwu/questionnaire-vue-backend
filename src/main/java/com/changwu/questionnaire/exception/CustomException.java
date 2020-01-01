@@ -1,17 +1,14 @@
 package com.changwu.questionnaire.exception;
 
-import org.springframework.http.HttpStatus;
 
 public class CustomException extends RuntimeException {
 
-  private static final long serialVersionUID = 1L;
-
   private final String message;
-  private final HttpStatus httpStatus;
+  private final Integer status;
 
-  public CustomException(String message, HttpStatus httpStatus) {
+  public CustomException(String message,Integer status) {
     this.message = message;
-    this.httpStatus = httpStatus;
+    this.status = status;
   }
 
   @Override
@@ -19,8 +16,7 @@ public class CustomException extends RuntimeException {
     return message;
   }
 
-  public HttpStatus getHttpStatus() {
-    return httpStatus;
+  public Integer getStatus() {
+    return status;
   }
-
 }

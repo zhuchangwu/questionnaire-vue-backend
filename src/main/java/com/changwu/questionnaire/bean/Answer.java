@@ -1,5 +1,8 @@
 package com.changwu.questionnaire.bean;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -10,6 +13,8 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "answer")
+@ToString
+
 public class Answer {
 
     @Id
@@ -22,14 +27,18 @@ public class Answer {
     private Integer questionId;
 
     // 当前answer 对应的QuestionId
-    @Column(name = "paper_id",columnDefinition = "int(11)",unique = true,nullable = false)
+    @Column(name = "paper_id",columnDefinition = "int(11)",nullable = false)
     private Integer paperId;
+
+    // 当前answer 对应的QuestionId
+    @Column(name = "user_id",columnDefinition = "int(11)",nullable = false)
+    private Integer userId;
 
     // 问题的类型
     // 1：单选
     // 2：多选
     // 3：简答
-    @Column(name = "question_type",columnDefinition = "int(2)")
+    @Column(name = "question_type",columnDefinition = "int(1)")
     private int questionType;
 
     // 问题的标题
@@ -49,7 +58,19 @@ public class Answer {
     @JoinColumn(name = "question_id",referencedColumnName = "id",insertable = false , updatable = false)
     private Question question;
 
+
+
     public Answer() {
+    }
+
+    public Answer(Integer questionId, Integer paperId, Integer userId, int questionType, String title, String answerOption) {
+        this.questionId = questionId;
+        this.paperId = paperId;
+        this.userId = userId;
+        this.questionType = questionType;
+        this.title = title;
+        this.createTime = new Date();
+        this.answerOption = answerOption;
     }
 
     public Integer getId() {
@@ -111,7 +132,7 @@ public class Answer {
     public Question getQuestion() {
         return question;
     }
-
+    @JsonBackReference
     public void setQuestion(Question question) {
         this.question = question;
     }

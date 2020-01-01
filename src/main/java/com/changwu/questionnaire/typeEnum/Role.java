@@ -1,4 +1,4 @@
-package com.changwu.questionnaire.bean;
+package com.changwu.questionnaire.typeEnum;
 
 import org.springframework.security.core.GrantedAuthority;
 

@@ -1,5 +1,6 @@
 package com.changwu.questionnaire.bean;
 
+import com.changwu.questionnaire.typeEnum.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -46,7 +47,7 @@ public class User {
     // 状态
     // 0: 正常
     // 1: 禁用
-    @Column(name = "status", columnDefinition = "int(2) default 0")
+    @Column(name = "status", columnDefinition = "int(1) default 0")
     private int status;
 
     // 头像
@@ -60,7 +61,7 @@ public class User {
     @Transient
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Set<Paper> papers = new HashSet<>();
 
 

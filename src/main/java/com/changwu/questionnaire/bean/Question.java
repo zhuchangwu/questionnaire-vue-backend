@@ -1,5 +1,9 @@
 package com.changwu.questionnaire.bean;
 
+import com.changwu.questionnaire.typeEnum.QuestionTypeEnum;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,7 +23,7 @@ public class Question {
     private Integer id;
 
     //外键: 当前问题所属的问卷id
-    @Column(name = "paper_id",columnDefinition = "int(11)",nullable = false,unique = true)
+    @Column(name = "paper_id",columnDefinition = "int(11)",nullable = false)
     private Integer paperId;
 
     // 创建日期
@@ -30,8 +34,8 @@ public class Question {
     // 1：单选
     // 2：多选
     // 3：简答
-    @Column(name = "question_type",columnDefinition = "int(2)",nullable = false)
-    private String questionType;
+    @Column(name = "question_type",columnDefinition = "int(1)",nullable = false)
+    private Integer questionType;
 
     // 问题题目
     @Column(name = "question_title",columnDefinition = "varchar(128)",nullable = false)
@@ -45,22 +49,50 @@ public class Question {
     @Column(name = "question_answer",columnDefinition = "varchar(512)")
     private String questionAnswer;
 
+    // 是否必填
+    // false 不必须
+    // ture 必须
+    @Column(name = "is_required",columnDefinition = "varchar(5) default ''")
+    private String isRequired;
+
     // 维护 问题与问卷多对一的关系
     @ManyToOne(targetEntity = Paper.class)
     @JoinColumn(name = "paper_id",referencedColumnName = "id", insertable = false , updatable = false)
     private Paper paper;
 
     // 维护 问题与回答一对多的关系
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Set<Answer> anwers = new HashSet<>();
 
     public Question() {
+
     }
+
+    public Question(Integer paperId, Integer questionType, String questionTitle, String questionOption, String questionAnswer) {
+        this.paperId = paperId;
+        this.createTime = new Date();
+        this.questionType = questionType;
+        this.questionTitle = questionTitle;
+        this.questionOption = questionOption;
+        this.questionAnswer = questionAnswer;
+    }
+
+    public Question(Integer paperId, Integer questionType, String questionTitle, String t, String objectToJson, String required) {
+        this.paperId = paperId;
+        this.createTime = new Date();
+        this.questionType = questionType;
+        this.questionTitle = questionTitle;
+        this.questionOption = t;
+        this.questionAnswer = objectToJson;
+        this.isRequired=required;
+    }
+
 
     public Paper getPaper() {
         return paper;
     }
 
+    @JsonBackReference
     public void setPaper(Paper paper) {
         this.paper = paper;
     }
@@ -69,6 +101,7 @@ public class Question {
         return anwers;
     }
 
+    @JsonBackReference
     public void setAnwers(Set<Answer> anwers) {
         this.anwers = anwers;
     }
@@ -97,11 +130,11 @@ public class Question {
         this.createTime = createTime;
     }
 
-    public String getQuestionType() {
+    public Integer getQuestionType() {
         return questionType;
     }
 
-    public void setQuestionType(String questionType) {
+    public void setQuestionType(Integer questionType) {
         this.questionType = questionType;
     }
 
@@ -127,5 +160,13 @@ public class Question {
 
     public void setQuestionAnswer(String questionAnswer) {
         this.questionAnswer = questionAnswer;
+    }
+
+    public String getIsRequired() {
+        return isRequired;
+    }
+
+    public void setIsRequired(String isRequired) {
+        this.isRequired = isRequired;
     }
 }

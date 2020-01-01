@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 封装单个问题
@@ -28,9 +29,9 @@ public class Option {
     // 是否是必填的
     private String required;
     // 问题的描述
-    private ArrayList<String> answers;
+    private List<String> answers;
     // 问题的参考答案
-    private ArrayList<String> answersData;
+    private List<String> answersData;
 
     // 文本问题的参考答案
     private String text;

@@ -1,5 +1,8 @@
 package com.changwu.questionnaire.bean;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -20,7 +23,7 @@ public class Paper {
     private Integer id;
 
     // 外键, 创建问卷的用户ID
-    @Column(name = "user_id",columnDefinition = "int(11)", nullable = false,unique = true)
+    @Column(name = "user_id",columnDefinition = "int(11)", nullable = false)
     private Integer userId;
 
     // 问卷的标题
@@ -36,7 +39,7 @@ public class Paper {
     // 1：已发布
     // 2：已结束
     // 3：已删除
-    @Column(name = "status",columnDefinition = "int(2) default '0'")
+    @Column(name = "status",columnDefinition = "int(1) default 0")
     private int status;
 
     // 截止日期
@@ -49,17 +52,36 @@ public class Paper {
     private User user;
 
     // 问卷与问题 一对多
-    @OneToMany(mappedBy = "paper")
+    @OneToMany(mappedBy = "paper",cascade=CascadeType.ALL)
     private Set<Question> questions = new HashSet<>();
+
+    @Transient
+    private String userName;
 
     public Paper() {
 
+    }
+
+    public Paper(Integer userId, String title, Date endTime) {
+        this.userId = userId;
+        this.title = title;
+        this.createTime = new Date();
+        this.endTime = endTime;
     }
 
     public Set<Question> getQuestions() {
         return questions;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    @JsonBackReference
     public void setQuestions(Set<Question> questions) {
         this.questions = questions;
     }
@@ -115,7 +137,7 @@ public class Paper {
     public User getUser() {
         return user;
     }
-
+    @JsonBackReference
     public void setUser(User user) {
         this.user = user;
     }

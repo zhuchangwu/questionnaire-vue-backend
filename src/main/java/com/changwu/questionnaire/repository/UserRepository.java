@@ -1,6 +1,6 @@
 package com.changwu.questionnaire.repository;
 
-import com.changwu.questionnaire.bean.Role;
+import com.changwu.questionnaire.typeEnum.Role;
 import com.changwu.questionnaire.bean.User;
 import org.springframework.stereotype.Repository;
 
