@@ -28,7 +28,7 @@ public class User {
 
     // 密码
     @Size(min = 8, message = "Mininum password length: 8 character")
-    @Column(name = "password", nullable = false, columnDefinition = "varchar(64)") //
+    @Column(name = "password", nullable = false) //
     private String password;
 
 

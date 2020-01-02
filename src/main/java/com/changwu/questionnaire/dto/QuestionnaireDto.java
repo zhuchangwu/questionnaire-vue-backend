@@ -25,6 +25,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionnaireDto {
+  //根据id区分是添加, 还是修改
+  private Integer id;
   private String title;
   private ArrayList<Option> Questions;
   private Date exipreTime;
@@ -34,16 +36,16 @@ public class QuestionnaireDto {
    * @param paper
    */
   public QuestionnaireDto(Paper paper) {
-
+    this.id=paper.getId();
     this.title=paper.getTitle();
     this.exipreTime=paper.getEndTime();
     this.Questions = new ArrayList<>();
     Set<Question> questions = paper.getQuestions();
 
-
     for (Question question : questions) {
         if (question.getQuestionType().equals(QuestionTypeEnum.RadioQuestion.getQuestionType())){
           Option option = new Option();
+          option.setId(question.getId());
           option.setTitle(question.getQuestionTitle());
           option.setType("radio");
           option.setAnswers(JsonUtils.jsonToList(question.getQuestionOption(),String.class));
@@ -53,6 +55,7 @@ public class QuestionnaireDto {
           System.out.println("-------------RadioQuestion------------------------");
         }else if (question.getQuestionType().equals(QuestionTypeEnum.CheckBoxQuestion.getQuestionType())){
           Option option = new Option();
+          option.setId(question.getId());
           option.setTitle(question.getQuestionTitle());
           option.setType("checkbox");
           option.setAnswers(JsonUtils.jsonToList(question.getQuestionOption(),String.class));
@@ -62,6 +65,7 @@ public class QuestionnaireDto {
           System.out.println("-------------CheckBoxQuestion------------------------");
         }else if (question.getQuestionType().equals(QuestionTypeEnum.TextQuestion.getQuestionType())){
           Option option = new Option();
+          option.setId(question.getId());
           option.setTitle(question.getQuestionTitle());
           option.setType("text");
           option.setRequired(question.getIsRequired());

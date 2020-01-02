@@ -77,13 +77,13 @@ public class Question {
         this.questionAnswer = questionAnswer;
     }
 
-    public Question(Integer paperId, Integer questionType, String questionTitle, String t, String objectToJson, String required) {
+    public Question(Integer paperId, Integer questionType, String questionTitle, String t, String answer, String required) {
         this.paperId = paperId;
         this.createTime = new Date();
         this.questionType = questionType;
         this.questionTitle = questionTitle;
         this.questionOption = t;
-        this.questionAnswer = objectToJson;
+        this.questionAnswer = answer;
         this.isRequired=required;
     }
 

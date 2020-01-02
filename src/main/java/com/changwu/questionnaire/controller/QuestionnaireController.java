@@ -8,7 +8,9 @@ import com.changwu.questionnaire.security.JwtTokenProvider;
 import com.changwu.questionnaire.service.PaperService;
 import com.changwu.questionnaire.service.QuestionnaireService;
 import com.changwu.questionnaire.vo.JSONResult;
+import org.aspectj.lang.annotation.RequiredTypes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +30,7 @@ public class QuestionnaireController {
     JwtTokenProvider provider;
     @Autowired
     PaperService paperService;
+
     /**
      * 上传问卷草稿
      *
@@ -54,22 +57,53 @@ public class QuestionnaireController {
      * @return
      */
     @GetMapping("/getQuestionnaireByPage")
-    public JSONResult getQuestionnaireByPage(@RequestParam Integer from, @RequestParam Integer limit) {
+    public JSONResult getQuestionnaireByPage(@RequestParam Integer from, @RequestParam Integer limit, @RequestParam(required = false) String name) {
         System.out.println("form -- " + from);
         System.out.println("limit -- " + limit);
-        Page page = paperService.getQuestionnaireByPage(from, limit);
+        Page page = paperService.getQuestionnaireByPage(from, limit,name);
         List<Paper> content = page.getContent();
-        content.forEach(item->{
+        content.forEach(item -> {
             item.setUserName(item.getUser().getName());
         });
         return JSONResult.responsePage(200, page);
     }
 
-
     @GetMapping("/getQuestionnaireById")
-    public JSONResult getQuestionnaireById(@RequestParam Integer id){
-       QuestionnaireDto questionnaireDto =  paperService.getQuestionnaireById(id);
-       return JSONResult.responsePage(200, questionnaireDto);
+    public JSONResult getQuestionnaireById(@RequestParam Integer id) {
+        QuestionnaireDto questionnaireDto = paperService.getQuestionnaireById(id);
+        return JSONResult.responsePage(200, questionnaireDto);
+    }
+
+    // 将问卷上线
+    @PutMapping("/pushOnline")
+    public JSONResult pushOnline(@RequestParam Integer id){
+        try{
+            paperService.pushOnline(id);
+            return JSONResult.ok("问卷已上线成功");
+        }catch (CustomException e){
+            return JSONResult.errorMsg(e.getStatus(),e.getMessage());
+        }
+    }
+
+    // 将问卷下线
+    @PutMapping("/backOnline")
+    public JSONResult backOnline(@RequestParam Integer id){
+        try{
+            paperService.backOnline(id);
+            return JSONResult.ok("问卷成功下线");
+        }catch (CustomException e){
+            return JSONResult.errorMsg(e.getStatus(),e.getMessage());
+        }
+    }
+
+    @PutMapping("/delete")
+    public JSONResult delete(@RequestParam Integer id){
+        try{
+            paperService.delete(id);
+            return JSONResult.ok("问卷删除成功");
+        }catch (CustomException e){
+            return JSONResult.errorMsg(e.getStatus(),e.getMessage());
+        }
     }
 
 }

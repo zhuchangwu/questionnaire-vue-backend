@@ -19,6 +19,9 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class Option {
+    // 单个问题的id
+    private Integer id;
+
     // 单个问题的名称
     private String title;
     // 单个问题的类型
