@@ -2,6 +2,7 @@ package com.changwu.questionnaire.bean;
 
 import com.changwu.questionnaire.typeEnum.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -15,22 +16,21 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "user")
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    // 账号
-    @JsonIgnore
-    @Size(min = 6, max = 255, message = "Mininum username length: 6 character")
+
+    //@Size(min = 6, max = 255, message = "Mininum username length: 6 character")
     @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    // 密码
-    @Size(min = 8, message = "Mininum password length: 8 character")
-    @Column(name = "password", nullable = false) //
+    @JsonIgnore
+   // @Size(min = 8, message = "Mininum password length: 8 character")
+    @Column(name = "password", nullable = false)
     private String password;
-
 
     // 名称
     @Column(name = "name", columnDefinition = "varchar(64) default ''")
@@ -61,13 +61,14 @@ public class User {
     @Transient
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private Set<Paper> papers = new HashSet<>();
-
 
     public User() {
-
     }
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Set<Paper> papers = new HashSet<>();
 
     public User(String name, String avatar, List<Role> roles) {
         this.name = name;

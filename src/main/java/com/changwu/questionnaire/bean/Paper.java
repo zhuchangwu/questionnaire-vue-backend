@@ -22,16 +22,22 @@ public class Paper {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private User user;
+
+    // 问卷与用户 多对一    // 添加懒加载的配置, 比如对User进行查询用户时, 不想级联查询出 user创建的paper    cascade = CascadeType.ALL,
+
     // 外键, 创建问卷的用户ID
-    @Column(name = "user_id",columnDefinition = "int(11)", nullable = false)
+    @Column(name = "user_id", columnDefinition = "int(11)", nullable = false)
     private Integer userId;
 
     // 问卷的标题
-    @Column(name = "title",columnDefinition = "varchar(128)",nullable = false)
+    @Column(name = "title", columnDefinition = "varchar(128)", nullable = false)
     private String title;
 
     // 创建时间
-    @Column(name = "create_time",columnDefinition = "date",nullable = false)
+    @Column(name = "create_time", columnDefinition = "date", nullable = false)
     private Date createTime;
 
     // 问卷的状态
@@ -39,27 +45,23 @@ public class Paper {
     // 1：已发布
     // 2：已结束
     // 3：已删除
-    @Column(name = "status",columnDefinition = "int(1) default 0")
+    @Column(name = "status", columnDefinition = "int(1) default 0")
     private int status;
 
     // 截止日期
-    @Column(name = "end_time",columnDefinition = "date",nullable = false)
+    @Column(name = "end_time", columnDefinition = "date", nullable = false)
     private Date endTime;
 
-    // 问卷与用户 多对一
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "user_id",referencedColumnName = "id", insertable = false , updatable = false)
-    private User user;
+
 
     // 问卷与问题 一对多
-    @OneToMany(mappedBy = "paper",cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "paper", cascade = CascadeType.ALL)
     private Set<Question> questions = new HashSet<>();
 
     @Transient
     private String userName;
 
     public Paper() {
-
     }
 
     public Paper(Integer userId, String title, Date endTime) {
@@ -81,6 +83,7 @@ public class Paper {
         this.userName = userName;
     }
 
+    // todo 整理这个bug
     @JsonBackReference
     public void setQuestions(Set<Question> questions) {
         this.questions = questions;
@@ -137,6 +140,7 @@ public class Paper {
     public User getUser() {
         return user;
     }
+
     @JsonBackReference
     public void setUser(User user) {
         this.user = user;

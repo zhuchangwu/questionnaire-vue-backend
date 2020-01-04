@@ -58,8 +58,6 @@ public class QuestionnaireController {
      */
     @GetMapping("/getQuestionnaireByPage")
     public JSONResult getQuestionnaireByPage(@RequestParam Integer from, @RequestParam Integer limit, @RequestParam(required = false) String name) {
-        System.out.println("form -- " + from);
-        System.out.println("limit -- " + limit);
         Page page = paperService.getQuestionnaireByPage(from, limit,name);
         List<Paper> content = page.getContent();
         content.forEach(item -> {

@@ -42,7 +42,6 @@ public class PaperService {
         if (limit < 10) {
             limit = 10;
         }
-
         Pageable pageable = PageRequest.of(from, limit);
         Page<Paper> page = paperRepository.findAll(new Specification() {
             @Override
@@ -55,11 +54,9 @@ public class PaperService {
                 }
                 Predicate[] predicates = new Predicate[predicateList.size()];
                 predicateList.toArray(predicates);
-                // 参数位置支持可变参数, 但是我们要尽量传递进去有效的条件
                 return criteriaBuilder.and(predicates);
             }
         }, pageable);
-
         return page;
     }
 
@@ -71,16 +68,12 @@ public class PaperService {
      * @return
      */
     public QuestionnaireDto getQuestionnaireById(Integer id) {
-
         Optional<Paper> optional = paperRepository.findById(id);
         if (!optional.isPresent()) {
             throw new CustomException("问卷不存在", 50008);
         }
-
         Paper paper = optional.get();
-
         return new QuestionnaireDto(paper);
-
     }
 
     // 将问卷的状态修改成上线的状态

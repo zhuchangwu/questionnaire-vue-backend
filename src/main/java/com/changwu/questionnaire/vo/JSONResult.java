@@ -27,7 +27,7 @@ public class JSONResult implements Serializable {
     public JSONResult(Integer code, Object page) {
         this.code=code;
         this.data=page;
-    }
+}
 
 
     // 返回给前端token
