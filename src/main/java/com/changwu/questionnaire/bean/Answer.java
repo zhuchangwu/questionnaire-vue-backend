@@ -21,11 +21,6 @@ public class Answer {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-
-    // 外键: 当前answer 对应的QuestionId
-    @Column(name = "question_id",columnDefinition = "int(11)",nullable = false,unique = true)
-    private Integer questionId;
-
     // 当前answer 对应的QuestionId
     @Column(name = "paper_id",columnDefinition = "int(11)",nullable = false)
     private Integer paperId;
@@ -55,16 +50,13 @@ public class Answer {
     private String answerOption;
 
     @ManyToOne(targetEntity = Question.class)
-    @JoinColumn(name = "question_id",referencedColumnName = "id",insertable = false , updatable = false)
+    @JoinColumn(name = "question_id",referencedColumnName = "id")
     private Question question;
-
-
 
     public Answer() {
     }
 
     public Answer(Integer questionId, Integer paperId, Integer userId, int questionType, String title, String answerOption) {
-        this.questionId = questionId;
         this.paperId = paperId;
         this.userId = userId;
         this.questionType = questionType;
@@ -81,13 +73,7 @@ public class Answer {
         this.id = id;
     }
 
-    public Integer getQuestionId() {
-        return questionId;
-    }
 
-    public void setQuestionId(Integer questionId) {
-        this.questionId = questionId;
-    }
 
     public Integer getPaperId() {
         return paperId;

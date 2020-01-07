@@ -22,15 +22,10 @@ public class Paper {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id") //, insertable = false, updatable = false
     private User user;
 
-    // 问卷与用户 多对一    // 添加懒加载的配置, 比如对User进行查询用户时, 不想级联查询出 user创建的paper    cascade = CascadeType.ALL,
-
-    // 外键, 创建问卷的用户ID
-    @Column(name = "user_id", columnDefinition = "int(11)", nullable = false)
-    private Integer userId;
 
     // 问卷的标题
     @Column(name = "title", columnDefinition = "varchar(128)", nullable = false)
@@ -65,7 +60,7 @@ public class Paper {
     }
 
     public Paper(Integer userId, String title, Date endTime) {
-        this.userId = userId;
+        //   this.userId = userId;
         this.title = title;
         this.createTime = new Date();
         this.endTime = endTime;
@@ -95,14 +90,6 @@ public class Paper {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public String getTitle() {

@@ -1,9 +1,6 @@
 package com.changwu.questionnaire.bean;
 
-import com.changwu.questionnaire.typeEnum.QuestionTypeEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.ToString;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -21,10 +18,6 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    //外键: 当前问题所属的问卷id
-    @Column(name = "paper_id",columnDefinition = "int(11)",nullable = false)
-    private Integer paperId;
 
     // 创建日期
     @Column(name = "create_time",columnDefinition = "date" ,nullable = false)
@@ -57,7 +50,7 @@ public class Question {
 
     // 维护 问题与问卷多对一的关系
     @ManyToOne(targetEntity = Paper.class)
-    @JoinColumn(name = "paper_id",referencedColumnName = "id", insertable = false , updatable = false)
+    @JoinColumn(name = "paper_id",referencedColumnName = "id")
     private Paper paper;
 
     // 维护 问题与回答一对多的关系
@@ -69,7 +62,6 @@ public class Question {
     }
 
     public Question(Integer paperId, Integer questionType, String questionTitle, String questionOption, String questionAnswer) {
-        this.paperId = paperId;
         this.createTime = new Date();
         this.questionType = questionType;
         this.questionTitle = questionTitle;
@@ -78,7 +70,6 @@ public class Question {
     }
 
     public Question(Integer paperId, Integer questionType, String questionTitle, String t, String answer, String required) {
-        this.paperId = paperId;
         this.createTime = new Date();
         this.questionType = questionType;
         this.questionTitle = questionTitle;
@@ -114,13 +105,6 @@ public class Question {
         this.id = id;
     }
 
-    public Integer getPaperId() {
-        return paperId;
-    }
-
-    public void setPaperId(Integer paperId) {
-        this.paperId = paperId;
-    }
 
     public Date getCreateTime() {
         return createTime;

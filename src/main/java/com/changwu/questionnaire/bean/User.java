@@ -3,10 +3,7 @@ package com.changwu.questionnaire.bean;
 import com.changwu.questionnaire.typeEnum.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.ToString;
-
 import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -65,10 +62,9 @@ public class User {
     public User() {
     }
 
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private Set<Paper> papers = new HashSet<>();
+  //  @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private Set<Paper> papers ;
 
     public User(String name, String avatar, List<Role> roles) {
         this.name = name;
